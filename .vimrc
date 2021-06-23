@@ -1,192 +1,76 @@
-" Don't try to be vi compatible
-set nocompatible
+call plug#begin("~/.vim/plugged")
+  " Theme
+  Plug 'dracula/vim'
 
-" Helps force plugins to load correctly when it is turned back on below
-filetype off
-
-" TODO: Load plugins here (pathogen or vundle)
-
-" Turn on syntax highlighting
-syntax on
-
-" For plugins to load correctly
-filetype plugin indent on
-
-" TODO: Pick a leader key
-" let mapleader = ","
-
-" Security
-set modelines=0
-
-" Show line numbers
-set number
-
-" Show file stats
-set ruler
-
-" Blink cursor on error instead of beeping (grr)
-set visualbell
-
-" Encoding
-set encoding=utf-8
-
-" Whitespace
-set wrap
-set textwidth=79
-set formatoptions=tcqrn1
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-set noshiftround
-
-" Cursor motion
-set scrolloff=3
-set backspace=indent,eol,start
-set matchpairs+=<:> " use % to jump between pairs
-runtime! macros/matchit.vim
-
-" Move up/down editor lines
-nnoremap j gj
-nnoremap k gk
-
-" Allow hidden buffers
-set hidden
-
-" Rendering
-set ttyfast
-
-" Status bar
-set laststatus=2
-
-" Last line
-set showmode
-set showcmd
-
-" Searching
-nnoremap / /\v
-vnoremap / /\v
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-set showmatch
-map <leader><space> :let @/=''<cr> " clear search
-
-" Remap help key.
-inoremap <F1> <ESC>:set invfullscreen<CR>a
-nnoremap <F1> :set invfullscreen<CR>
-vnoremap <F1> :set invfullscreen<CR>
-
-" Textmate holdouts
-
-" Formatting
-map <leader>q gqip
-
-" Visualize tabs and newlines
-set listchars=tab:▸\ ,eol:¬
-" Uncomment this to enable by default:
-" set list " To enable by default
-" Or use your leader key + l to toggle on/off
-map <leader>l :set list!<CR> " Toggle tabs and EOL
-
-" Color scheme (terminal)
-set t_Co=256
-set background=dark
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-" put https://raw.github.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-" in ~/.vim/colors/ and uncomment:
-" colorscheme solarized
+  " Language Client
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
+  " TypeScript Highlighting
+  Plug 'leafgarland/typescript-vim'
+  Plug 'peitalin/vim-jsx-typescript'
 
 
-" Vundle seetings go below this line
+  " File Explorer with Icons
+  Plug 'scrooloose/nerdtree'
+  Plug 'ryanoasis/vim-devicons'
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+  " File Search
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+call plug#end()
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Enable theming support
+if (has("termguicolors"))
+ set termguicolors
+endif
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'perl-support.vim'
-Plugin 'tpope/vim-surround'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'vim-airline/vim-airline'
-Plugin 'pangloss/vim-javascript'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'mxw/vim-jsx'
-" Plugin 'scrooloose/nerdtree'
-Plugin 'vim-perl/vim-perl'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'kien/ctrlp.vim'
-Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'chrisbra/NrrwRgn'
-Plugin 'google/vim-searchindex'
-Plugin 'scrooloose/syntastic'
-Plugin 'majutsushi/tagbar'
-Plugin 'godlygeek/tabular'
-Plugin 'c9s/perlomni.vim'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'ervandew/supertab'
-Plugin 'w0rp/ale'
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-" git repos on your local machine (i.e. when working on your own plugin)
-" Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
+" Theme
+syntax enable
+colorscheme dracula
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = []
+let g:NERDTreeStatusline = ''
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Toggle
+nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 
-" NERDTREE SETTINGS
-" This is for starting Nerdtree when vim starts
-" autocmd vimenter * NERDTree
-" 
-" " Start Nerdtree when no files are specified
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-" 
-" " Start NerdTree when vim is run on a directory
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
-" 
-" map <C-n> :NERDTreeToggle<CR>
-" 
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+nnoremap <C-p> :FZF<CR>
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \}
+" requires silversearcher-ag
+" used to ignore gitignore files
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
-" Setting the colorscheme
-colorscheme Benokai
+" open new split panes to right and below
+set splitright
+set splitbelow
 
-" Settings for Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" turn terminal to normal mode with escape
+tnoremap <Esc> <C-\><C-n>
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" use alt+hjkl to move between split/vsplit panels
+tnoremap <A-h> <C-\><C-n><C-w>h
+tnoremap <A-j> <C-\><C-n><C-w>j
+tnoremap <A-k> <C-\><C-n><C-w>k
+tnoremap <A-l> <C-\><C-n><C-w>l
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
+" start terminal in insert mode
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+
+" open terminal on ctrl+;
+" uses zsh instead of bash
+function! OpenTerminal()
+  split term://bash
+  resize 10
+endfunction
+nnoremap <c-n> :call OpenTerminal()<CR>
